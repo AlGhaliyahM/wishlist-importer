@@ -1,11 +1,15 @@
 {
     "compilerOptions": {
+      "allowJs": true,
+      "checkJs": true,
+      "esModuleInterop": true,
       "target": "es5",
       "module": "commonjs",
       "declaration": true,
       "outDir": "./lib",
-      "strict": true
+      "strict": true,
+      "allowImportingTsExtensions": true
     },
-    "include": ["src"],
+    "include": ["src", "playground/test.ts"],
     "exclude": ["node_modules", "**/__tests__/*"]
   }
