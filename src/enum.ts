@@ -9,13 +9,12 @@ enum mamasandpapasSelector {
 }
 
 enum amazonSelector {
-  // BASE_SELECTOR = '#content-right.a-fixed-left-grid-col a-col-right' li.a-spacing-none.g-item-sortable #wl-item-view.a-section.a-spacing-none #item-page-wrapper.a-unordered-list.a-nostyle.a-vertical.a-spacing-none.g-items-section.ui-sortable,
   BASE_SELECTOR = '#content-right.a-fixed-left-grid-col.a-col-right ul.a-unordered-list.a-nostyle.a-vertical.a-spacing-none.g-items-section.ui-sortable li.a-spacing-none.g-item-sortable',
   ITEM_NAME_SELECTOR = 'h2.a-size-base a.a-link-normal',
   ITEM_PRICE_SELECTOR = 'span.a-price span.a-offscreen',
   ITEM_IMG_SELECTOR = 'a.a-link-normal img',
   ITEM_URL_SELECTOR = 'a.a-link-normal',
-  DOMAIN = 'amazon.sa',
+  DOMAIN = 'www.amazon.sa',
 }
 
 export { mamasandpapasSelector, amazonSelector };

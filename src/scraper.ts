@@ -10,6 +10,7 @@ export class Scraper {
   }
 
   async mamasandpapasScraper(): Promise<Wishlist[] | any> {
+    console.log('INSIDE MAMA&PAPAS');
     let Url = new URL(this.url);
     let domain = Url.hostname;
     const wishlists: Wishlist[] = [];
