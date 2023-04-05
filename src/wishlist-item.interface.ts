@@ -1,4 +1,4 @@
-export interface Wishlist {
+export interface WishlistItem {
   item_name: string;
   item_price: string;
   item_img: string;
