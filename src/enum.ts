@@ -5,7 +5,6 @@ enum mamasandpapasSelector {
   ITEM_PRICE_SELECTOR = 'span.b-price__value',
   ITEM_IMG_SELECTOR = '.b-product-tile__image-img.tile-image.js-product__image',
   ITEM_URL_SELECTOR = '.b-wishlist-tile__image-link',
-  DOMAIN = 'en.mamasandpapas.com.sa',
 }
 
 enum amazonSelector {
@@ -14,7 +13,6 @@ enum amazonSelector {
   ITEM_PRICE_SELECTOR = 'span.a-price span.a-offscreen',
   ITEM_IMG_SELECTOR = 'a.a-link-normal img',
   ITEM_URL_SELECTOR = 'a.a-link-normal',
-  DOMAIN = 'www.amazon.sa',
 }
 
 enum ounassSelector {
@@ -23,7 +21,11 @@ enum ounassSelector {
   ITEM_PRICE_SELECTOR = 'span.WishListItemDesktop-minPrice',
   ITEM_IMG_SELECTOR = 'img.WishListItemDesktop-image',
   ITEM_URL_SELECTOR = 'a.WishListItemDesktop-link',
-  DOMAIN = 'en-saudi.ounass.com',
 }
 
-export { mamasandpapasSelector, amazonSelector, ounassSelector };
+enum supportedDomain {
+  MAMAS_PAPAS_Domain = 'mamasandpapas.com.sa',
+  AMAZON_DOMAIN = 'amazon.sa',
+  OUNASS_DOMAIN = 'ounass.com',
+}
+export { mamasandpapasSelector, amazonSelector, ounassSelector, supportedDomain };
