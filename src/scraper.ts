@@ -1,137 +1,121 @@
-import { Wishlist } from './wishlist.interface';
+import { WishlistItem } from './wishlist-item.interface';
 import * as cheerio from 'cheerio';
 import axios from 'axios';
-import { amazonSelector, mamasandpapasSelector, ounassSelector } from './enum';
+import { amazonSelector, mamasandpapasSelector, ounassSelector, supportedDomain } from './enum';
+import { setError, ErrorMessage } from './error';
 
 export class Scraper {
-  url: string;
-  constructor(url: string) {
-    this.url = url;
-  }
+  constructor() {}
 
-  async mamasandpapasScraper(): Promise<Wishlist[] | any> {
-    console.log('INSIDE MAMA&PAPAS');
-    let Url = new URL(this.url);
-    let domain = Url.hostname;
-    const wishlists: Wishlist[] = [];
+  async mamasandpapasScraper(url: string): Promise<WishlistItem[] | ErrorMessage> {
+    const wishlistItems: WishlistItem[] = [];
 
-    if (this.isValidUrl()) {
+    if (this.isSupportedUrl(url)) {
       try {
         // fetch html of the page we want to scrape
-        const { data } = await axios.get(this.url);
+        const { data } = await axios.get(url);
 
         // Load html we fetched in the previous line
         const $ = cheerio.load(data);
-        // select all the list items in b-tab-content b-toggle__content m-expanded class
-        const wishlistItems = $(mamasandpapasSelector.BASE_SELECTOR);
+        // select all the list wishlistItem in b-tab-content b-toggle__content m-expanded class
+        const list = $(mamasandpapasSelector.BASE_SELECTOR);
 
         // use .each method to loop through the selected css
-        wishlistItems.each((i, el) => {
-          wishlists.push({
+        list.each((i, el) => {
+          wishlistItems.push({
             item_name: $(el).find(mamasandpapasSelector.ITEM_NAME_SELECTOR).text(),
             item_price: $(el).find(mamasandpapasSelector.ITEM_PRICE_SELECTOR).attr('content') + '',
             item_img: $(el).find(mamasandpapasSelector.ITEM_IMG_SELECTOR).attr('src') + '',
-            item_url:
-              'https://' +
-              mamasandpapasSelector.DOMAIN +
-              $(el).find(mamasandpapasSelector.ITEM_URL_SELECTOR).attr('href'),
+            item_url: $(el).find(mamasandpapasSelector.ITEM_URL_SELECTOR).attr('href') + '',
           });
         });
 
-        return {
-          items: wishlists,
-        };
+        return wishlistItems;
       } catch (error) {
-        return { error: 'error encountred during fetching ' };
+        return setError('error encountred during fetching ');
       }
     } else {
-      return { error: 'URL is not valid' };
+      return setError('URL is not valid');
     }
   }
 
-  async amazonScraper(): Promise<Wishlist[] | any> {
-    console.log('INSIDE AMAZON SCRAPING METHOD');
-    let Url = new URL(this.url);
-    let domain = Url.hostname;
-    const wishlists: Wishlist[] = [];
+  async amazonScraper(url: string): Promise<WishlistItem[] | ErrorMessage> {
+    const wishlistItems: WishlistItem[] = [];
 
-    if (this.isValidUrl()) {
+    if (this.isSupportedUrl(url)) {
       try {
         // fetch html of the page we want to scrape
-        const { data } = await axios.get(this.url);
+        const { data } = await axios.get(url);
 
         // Load html we fetched in the previous line
         const $ = cheerio.load(data);
 
-        const wishlistItems = $(amazonSelector.BASE_SELECTOR);
+        const list = $(amazonSelector.BASE_SELECTOR);
 
         // use .each method to loop through the selected css
-        wishlistItems.each((i, el) => {
-          wishlists.push({
+        list.each((i, el) => {
+          wishlistItems.push({
             item_name: $(el).find(amazonSelector.ITEM_NAME_SELECTOR).attr('title') + '',
             item_price: $(el).find(amazonSelector.ITEM_PRICE_SELECTOR).text(),
             item_img: $(el).find(amazonSelector.ITEM_IMG_SELECTOR).attr('src') + '',
-            item_url:
-              'https://' + amazonSelector.DOMAIN + $(el).find(amazonSelector.ITEM_URL_SELECTOR).attr('href') + '',
+            item_url: $(el).find(amazonSelector.ITEM_URL_SELECTOR).attr('href') + '',
           });
         });
-
-        return {
-          items: wishlists,
-        };
+        return wishlistItems;
       } catch (error) {
-        return { error: 'error encountred during fetching ' };
+        return setError('error encountred during fetching ');
       }
     } else {
-      return { error: 'URL is not valid' };
+      return setError('URL is not valid');
     }
   }
 
-  async ounassScraper(): Promise<Wishlist[] | any> {
-    console.log('INSIDE OUNASS SCRAPING METHOD');
-    let Url = new URL(this.url);
-    let domain = Url.hostname;
-    const wishlists: Wishlist[] = [];
+  async ounassScraper(url: string): Promise<WishlistItem[] | ErrorMessage> {
+    const wishlistItems: WishlistItem[] = [];
 
-    if (this.isValidUrl()) {
+    if (this.isSupportedUrl(url)) {
       try {
         // fetch html of the page we want to scrape
-        const { data } = await axios.get(this.url);
+        const { data } = await axios.get(url);
 
         // Load html we fetched in the previous line
         const $ = cheerio.load(data);
 
-        const wishlistItems = $(ounassSelector.BASE_SELECTOR);
+        const list = $(ounassSelector.BASE_SELECTOR);
 
         // use .each method to loop through the selected css
-        wishlistItems.each((i, el) => {
-          wishlists.push({
+        list.each((i, el) => {
+          wishlistItems.push({
             item_name: $(el).find(ounassSelector.ITEM_NAME_SELECTOR).text(),
             item_price: $(el).find(ounassSelector.ITEM_PRICE_SELECTOR).text(),
-            item_img: 'https:' + $(el).find(ounassSelector.ITEM_IMG_SELECTOR).attr('src') + '',
-            item_url:
-              'https://' + ounassSelector.DOMAIN + $(el).find(ounassSelector.ITEM_URL_SELECTOR).attr('href') + '',
+            item_img: $(el).find(ounassSelector.ITEM_IMG_SELECTOR).attr('src') + '',
+            item_url: $(el).find(ounassSelector.ITEM_URL_SELECTOR).attr('href') + '',
           });
         });
 
-        return {
-          items: wishlists,
-        };
+        return wishlistItems;
       } catch (error) {
-        return { error: 'error encountred during fetching ' };
+        return setError('error encountred during fetching ');
       }
     } else {
-      return { error: 'URL is not valid' };
+      return setError('URL is not valid');
     }
   }
 
-  //validate url format method
-  isValidUrl() {
+  // validate url format method
+  isSupportedUrl(url: string) {
     try {
-      let Url = new URL(this.url);
-      return Boolean(Url);
+      // TODO: validate if domain is supported.
+      const supportedDomains = Object.values(supportedDomain);
+      const wishlistUrl = new URL(url);
+      let flag = false;
+
+      for (const domain in supportedDomains) {
+        if (url.includes(domain)) flag = true;
+      }
+      return Boolean(wishlistUrl) && flag;
     } catch (e) {
-      return false;
+      throw new Error('Invalid Url');
     }
   }
 }
