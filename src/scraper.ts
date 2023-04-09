@@ -91,10 +91,9 @@ export class Scraper {
   }
 
   // validate url format method & call scraping method based on the domain
-  async wishlistScraper(url: string): Promise<WishlistItem[] | ErrorMessage | any> {
+  async wishlistScraper(url: string): Promise<WishlistItem[] | ErrorMessage> {
     try {
       const supportedDomains = Object.values(supportedDomain);
-      const wishlistUrl = new URL(url);
       let flag = false;
 
       // check if the given domain url is supported
@@ -113,6 +112,8 @@ export class Scraper {
         }
       }
       if (flag == false) return setError('Domain not supported');
+
+      return setError('Domain not supported');
     } catch (e) {
       throw new Error('Invalid Url');
     }
