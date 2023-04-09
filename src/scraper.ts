@@ -91,29 +91,28 @@ export class Scraper {
   }
 
   // validate url format method & call scraping method based on the domain
-  async wishlistScraper(url: string): Promise<WishlistItem[] | ErrorMessage> {
+  async wishlistScraper(url: string): Promise<WishlistItem[] | ErrorMessage | any> {
     try {
       const supportedDomains = Object.values(supportedDomain);
       let flag = false;
-
-      // check if the given domain url is supported
-      for (const domain in supportedDomains) {
-        if (url.includes(supportedDomains[domain]) && url.includes(supportedDomain.MAMAS_PAPAS_Domain)) {
-          flag = true;
-          return await this.mamasandpapasScraper(url);
+      let wishlistUrl = new URL(url);
+      if (Boolean(wishlistUrl)) {
+        for (const domain in supportedDomains) {
+          if (url.includes(supportedDomains[domain]) && url.includes(supportedDomain.MAMAS_PAPAS_Domain)) {
+            flag = true;
+            return await this.mamasandpapasScraper(url);
+          }
+          if (url.includes(supportedDomains[domain]) && url.includes(supportedDomain.AMAZON_DOMAIN)) {
+            flag = true;
+            return await this.amazonScraper(url);
+          }
+          if (url.includes(supportedDomains[domain]) && url.includes(supportedDomain.OUNASS_DOMAIN)) {
+            flag = true;
+            return await this.ounassScraper(url);
+          }
         }
-        if (url.includes(supportedDomains[domain]) && url.includes(supportedDomain.AMAZON_DOMAIN)) {
-          flag = true;
-          return await this.amazonScraper(url);
-        }
-        if (url.includes(supportedDomains[domain]) && url.includes(supportedDomain.OUNASS_DOMAIN)) {
-          flag = true;
-          return await this.ounassScraper(url);
-        }
+        if (flag == false) return setError('Domain not supported');
       }
-      if (flag == false) return setError('Domain not supported');
-
-      return setError('Domain not supported');
     } catch (e) {
       throw new Error('Invalid Url');
     }
