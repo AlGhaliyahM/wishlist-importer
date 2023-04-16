@@ -1,4 +1,4 @@
-import { Scraper } from '../src/scraper';
+import { Scraper } from '../index';
 
 async function test(url: string) {
   let wishlist__product;
@@ -9,7 +9,7 @@ async function test(url: string) {
 }
 
 //assign wishlist urls in urls[] array to test
-const urls = [''];
+const urls = ['https://en.mamasandpapas.com.sa/wishlist/shared?id=2d78c422df527b4a77bb283fb7'];
 const start = () => {
   urls.forEach((url) => {
     test(url);
