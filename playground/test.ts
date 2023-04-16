@@ -1,4 +1,4 @@
-import { Scraper } from '../index';
+import { Scraper } from '../src/index';
 
 async function test(url: string) {
   let wishlist__product;

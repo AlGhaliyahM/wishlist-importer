@@ -1,16 +1,19 @@
 {
     "compilerOptions": {
-      "allowJs": true,
-      "checkJs": true,
-      "esModuleInterop": true,
       "target": "es5",
       "module": "commonjs",
-      "declaration": true,
+      "moduleResolution": "node",
+      "allowJs": true,
+      "resolveJsonModule": true,
+      "esModuleInterop": true,
       "outDir": "./lib",
-      "strict": true,
-      "allowImportingTsExtensions": true,
-      "emitDeclarationOnly":true
+      "rootDir": "src",
+      // "checkJs": true,  
+      "declaration": true
+      //  "strict": true,    
+      //  "allowImportingTsExtensions": true
+      // "emitDeclarationOnly":true
     },
-    "include": ["src", "playground/test.ts"],
+    "include": ["src/**/*"],
     "exclude": ["node_modules", "**/__tests__/*"]
   }
