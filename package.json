@@ -23,7 +23,7 @@
     "wishlist-importer"
   ],
   "author": "AlGhaliyah M.",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/jest": "^29.5.0",
     "@types/node": "^18.15.11",
