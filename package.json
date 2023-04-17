@@ -2,16 +2,16 @@
   "name": "wishlist-importer",
   "version": "1.0.0",
   "description": "A wishlist importer library for providing the wishlist items data",
-  "main": "lib/index.js",
+  "main": "dist/index.js",
   "types": "commonjs",
   "repository": {
     "type": "git",
     "url": "https://github.com/AlGhaliyahM/wishlist-importer.git"
   },
   "scripts": {
-    "build": "rimraf ./lib && tsc",
+    "build": "rimraf ./dist && tsc",
     "dev": "nodemon",
-    "start": "npm run build && node lib/index.js",
+    "start": "npm run build && node dist/index.js",
     "test": "jest",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json"
