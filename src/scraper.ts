@@ -92,7 +92,7 @@ export class Scraper {
   }
 
   // validate url format method & call scraping method based on the domain
-  async wishlistScraper(url: string): Promise<WishlistItem[] | ErrorMessage | any> {
+  async wishlistScraper(url: string): Promise<WishlistItem[] | ErrorMessage> {
     try {
       const supportedDomains = Object.values(supportedDomain);
       let flag = false;

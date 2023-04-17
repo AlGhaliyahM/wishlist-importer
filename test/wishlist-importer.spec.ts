@@ -9,6 +9,7 @@ describe('Scraping wishlist Url', () => {
 
   let mamasandpapasData = sampleData[0].mamasandpapas_Data;
 
+  //note: amazon data for item_price is changing frequently
   let amazonData = sampleData[1].amazon_Data;
 
   let ounassData = sampleData[2].ounass_Data;
@@ -34,5 +35,10 @@ describe('Scraping wishlist Url', () => {
       'https://en-saudi.ounass.com/wishlist/shared/0cfa1b20-d32d-11ed-948c-db4d3a08f2f3',
     );
     expect(data).toStrictEqual(ounassData);
+  });
+
+  test('test unsupprted domain', async () => {
+    const data = await scraper.wishlistScraper('https://farfetch.com');
+    expect(data).toStrictEqual({ message: 'Domain not supported' });
   });
 });
