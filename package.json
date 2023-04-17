@@ -12,7 +12,7 @@
     "build": "rimraf ./lib && tsc",
     "dev": "nodemon",
     "start": "npm run build && node lib/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json"
   },
@@ -25,10 +25,14 @@
   "author": "AlGhaliyah M.",
   "license": "ISC",
   "devDependencies": {
+    "@types/jest": "^29.5.0",
     "@types/node": "^18.15.11",
+    "fs": "^0.0.1-security",
+    "jest": "^29.5.0",
     "nodemon": "^2.0.22",
     "prettier": "^2.8.7",
     "rimraf": "^5.0.0",
+    "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
   },

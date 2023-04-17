@@ -16,6 +16,7 @@ export class Scraper {
 
       // Load html we fetched in the previous line
       const $ = cheerio.load(data);
+      // const $ = await loadMethod.fromURL(url);
       // select all the list wishlistItem in b-tab-content b-toggle__content m-expanded class
       const list = $(mamasandpapasSelector.BASE_SELECTOR);
 
