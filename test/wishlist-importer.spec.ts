@@ -5,14 +5,16 @@ describe('Scraping wishlist Url', () => {
   const scraper = new Scraper();
 
   //read sample data
-  let sampleData = JSON.parse(fs.readFileSync(`./data/wishlist-data.json`, 'utf-8'));
+  const sampleData = JSON.parse(
+    fs.readFileSync(`./data/wishlist-data.json`, 'utf-8'),
+  );
 
-  let mamasandpapasData = sampleData[0].mamasandpapas_Data;
+  const mamasandpapasData = sampleData[0].mamasandpapas_Data;
 
   //note: amazon data for item_price is changing frequently
-  let amazonData = sampleData[1].amazon_Data;
+  const amazonData = sampleData[1].amazon_Data;
 
-  let ounassData = sampleData[2].ounass_Data;
+  const ounassData = sampleData[2].ounass_Data;
 
   test('Scraping mamas&papas wishlist', async () => {
     const data = await scraper.wishlistScraper(

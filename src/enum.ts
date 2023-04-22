@@ -28,4 +28,9 @@ enum supportedDomain {
   AMAZON_DOMAIN = 'amazon.sa',
   OUNASS_DOMAIN = 'ounass.com',
 }
-export { mamasandpapasSelector, amazonSelector, ounassSelector, supportedDomain };
+export {
+  mamasandpapasSelector,
+  amazonSelector,
+  ounassSelector,
+  supportedDomain,
+};
