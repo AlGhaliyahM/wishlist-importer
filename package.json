@@ -14,7 +14,7 @@
     "start": "npm run build && node dist/index.js",
     "test": "jest",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
-    "lint": "tslint -p tsconfig.json",
+    "lint": "eslint --ext \".ts,.js,\" --ignore-path .eslintignore .",
     "prepare": "husky install",
     "postinstall": "husky install",
     "lintfix": "eslint --fix --ext \".ts,.js\" --ignore-path .eslintignore ."
