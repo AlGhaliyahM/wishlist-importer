@@ -20,7 +20,7 @@
     "lintfix": "eslint --fix --ext \".ts,.js\" --ignore-path .eslintignore ."
   },
   "lint-staged": {
-    "**/*.{js,ts,vue,html}": [
+    "**/*.{js,ts}": [
       "npm run lintfix"
     ]
   },
