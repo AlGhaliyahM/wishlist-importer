@@ -1,7 +1,30 @@
+# Dependencies
 node_modules
-/lib
-**/.DS_Store
+
+# Logs
+*.log*
+
+# Temp directories
+.temp
+.tmp
+.cache
+
+# Generated dirs
 dist
+/lib
+
+# Env
+.env
 
 # VSCode
 .vscode
+
+# OSX
+**/.DS_Store
+.AppleDouble
+.LSOverride
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
