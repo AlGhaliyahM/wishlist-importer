@@ -3,16 +3,17 @@ import * as cheerio from 'cheerio';
 import axios from 'axios';
 import { amazonSelector, mamasandpapasSelector, ounassSelector, supportedDomain } from './enum';
 import { setError, ErrorMessage } from './error';
+import { AxiosRequestConfig } from 'axios';
 
 export class Scraper {
-  constructor() {}
+  constructor() { }
 
-  async mamasandpapasScraper(url: string): Promise<WishlistItem[] | ErrorMessage> {
+  async mamasandpapasScraper(url: string, axiosConfig?: AxiosRequestConfig): Promise<WishlistItem[] | ErrorMessage> {
     const wishlistItems: WishlistItem[] = [];
 
     try {
       // fetch html of the page we want to scrape
-      const { data } = await axios.get(url);
+      const { data } = await axios.get(url, axiosConfig);
 
       // Load html we fetched in the previous line
       const $ = cheerio.load(data);
@@ -36,12 +37,13 @@ export class Scraper {
     }
   }
 
-  async amazonScraper(url: string): Promise<WishlistItem[] | ErrorMessage> {
+  async amazonScraper(url: string, axiosConfig?: AxiosRequestConfig): Promise<WishlistItem[] | ErrorMessage> {
     const wishlistItems: WishlistItem[] = [];
 
     try {
       // fetch html of the page we want to scrape
-      const { data } = await axios.get(url);
+      const { data } = await axios.get(url, axiosConfig);
+
 
       // Load html we fetched in the previous line
       const $ = cheerio.load(data);
@@ -63,12 +65,13 @@ export class Scraper {
     }
   }
 
-  async ounassScraper(url: string): Promise<WishlistItem[] | ErrorMessage> {
+  async ounassScraper(url: string, axiosConfig?: AxiosRequestConfig): Promise<WishlistItem[] | ErrorMessage> {
     const wishlistItems: WishlistItem[] = [];
 
     try {
       // fetch html of the page we want to scrape
-      const { data } = await axios.get(url);
+      const { data } = await axios.get(url, axiosConfig);
+
 
       // Load html we fetched in the previous line
       const $ = cheerio.load(data);
@@ -92,28 +95,22 @@ export class Scraper {
   }
 
   // validate url format method & call scraping method based on the domain
-  async wishlistScraper(url: string): Promise<WishlistItem[] | ErrorMessage | any> {
+  async wishlistScraper(url: string, axiosConfig?: AxiosRequestConfig): Promise<WishlistItem[] | ErrorMessage | any> {
     try {
-      const supportedDomains = Object.values(supportedDomain);
-      let flag = false;
-      let wishlistUrl = new URL(url);
-      if (Boolean(wishlistUrl)) {
-        for (const domain in supportedDomains) {
-          if (url.includes(supportedDomains[domain]) && url.includes(supportedDomain.MAMAS_PAPAS_Domain)) {
-            flag = true;
-            return await this.mamasandpapasScraper(url);
-          }
-          if (url.includes(supportedDomains[domain]) && url.includes(supportedDomain.AMAZON_DOMAIN)) {
-            flag = true;
-            return await this.amazonScraper(url);
-          }
-          if (url.includes(supportedDomains[domain]) && url.includes(supportedDomain.OUNASS_DOMAIN)) {
-            flag = true;
-            return await this.ounassScraper(url);
-          }
-        }
-        if (flag == false) return setError('Domain not supported');
+      const wishlistUrl = new URL(url);
+      const requestConfig = axiosConfig ?? {};
+      if (wishlistUrl.hostname.includes(supportedDomain.MAMAS_PAPAS_DOMAIN)) {
+        return await this.mamasandpapasScraper(url, requestConfig);
       }
+      if (wishlistUrl.hostname.includes(supportedDomain.AMAZON_DOMAIN)) {
+        return await this.amazonScraper(url, requestConfig);
+      }
+      if (wishlistUrl.hostname.includes(supportedDomain.OUNASS_DOMAIN)) {
+        return await this.ounassScraper(url, requestConfig);
+      }
+
+      return setError('Domain not supported');
+
     } catch (e) {
       throw new Error('Invalid Url');
     }
