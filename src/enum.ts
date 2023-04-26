@@ -24,7 +24,7 @@ enum ounassSelector {
 }
 
 enum supportedDomain {
-  MAMAS_PAPAS_Domain = 'mamasandpapas.com.sa',
+  MAMAS_PAPAS_DOMAIN = 'mamasandpapas.com.sa',
   AMAZON_DOMAIN = 'amazon.sa',
   OUNASS_DOMAIN = 'ounass.com',
 }

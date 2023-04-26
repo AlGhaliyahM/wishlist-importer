@@ -43,4 +43,20 @@ describe('Scraping wishlist Url', () => {
     const data = await scraper.wishlistScraper('https://farfetch.com');
     expect(data).toStrictEqual({ message: 'Domain not supported' });
   });
+
+  test('Scraping mamas&papas wishlist with custom headers', async () => {
+    const data = await scraper.wishlistScraper(
+      'https://en.mamasandpapas.com.sa/wishlist/shared?id=2d78c422df527b4a77bb283fb7',
+      {
+        proxy: {
+          protocol: 'http',
+          host: '127.0.0.1',
+          port: 8080,
+        },
+      },
+    );
+    expect(data).toStrictEqual({
+      message: 'Error encountred during fetching ',
+    }); // this is the error implies that the request failed because we added invalid request config
+  });
 });
