@@ -8,22 +8,24 @@ import {
   supportedDomain,
 } from './enum';
 import { setError, ErrorMessage } from './error';
+import { AxiosRequestConfig } from 'axios';
 
 export class Scraper {
-  // constructor() {}
+  constructor() {}
 
   async mamasandpapasScraper(
-    url: string,
+    url: URL,
+    axiosConfig?: AxiosRequestConfig,
   ): Promise<WishlistItem[] | ErrorMessage> {
     const wishlistItems: WishlistItem[] = [];
 
     try {
       // fetch html of the page we want to scrape
-      const { data } = await axios.get(url);
+      const { data } = await axios.get(url.toString(), axiosConfig);
 
       // Load html we fetched in the previous line
       const $ = cheerio.load(data);
-      // const $ = await loadMethod.fromURL(url);
+
       // select all the list wishlistItem in b-tab-content b-toggle__content m-expanded class
       const list = $(mamasandpapasSelector.BASE_SELECTOR);
 
@@ -33,16 +35,21 @@ export class Scraper {
           item_name: $(el)
             .find(mamasandpapasSelector.ITEM_NAME_SELECTOR)
             .text(),
-          item_price:
-            $(el)
-              .find(mamasandpapasSelector.ITEM_PRICE_SELECTOR)
-              .attr('content') + '',
-          item_img:
-            $(el).find(mamasandpapasSelector.ITEM_IMG_SELECTOR).attr('src') +
-            '',
-          item_url:
-            $(el).find(mamasandpapasSelector.ITEM_URL_SELECTOR).attr('href') +
-            '',
+          item_price: $(el)
+            .find(mamasandpapasSelector.ITEM_PRICE_SELECTOR)
+            .attr('content')
+            .toString(),
+          item_img: $(el)
+            .find(mamasandpapasSelector.ITEM_IMG_SELECTOR)
+            .attr('src')
+            .toString(),
+          item_url: new URL(
+            url.origin +
+              $(el)
+                .find(mamasandpapasSelector.ITEM_URL_SELECTOR)
+                .attr('href')
+                .toString(),
+          ).toString(),
         });
       });
 
@@ -52,12 +59,15 @@ export class Scraper {
     }
   }
 
-  async amazonScraper(url: string): Promise<WishlistItem[] | ErrorMessage> {
+  async amazonScraper(
+    url: URL,
+    axiosConfig?: AxiosRequestConfig,
+  ): Promise<WishlistItem[] | ErrorMessage> {
     const wishlistItems: WishlistItem[] = [];
 
     try {
       // fetch html of the page we want to scrape
-      const { data } = await axios.get(url);
+      const { data } = await axios.get(url.toString(), axiosConfig);
 
       // Load html we fetched in the previous line
       const $ = cheerio.load(data);
@@ -67,13 +77,22 @@ export class Scraper {
       // use .each method to loop through the selected css
       list.each((i, el) => {
         wishlistItems.push({
-          item_name:
-            $(el).find(amazonSelector.ITEM_NAME_SELECTOR).attr('title') + '',
+          item_name: $(el)
+            .find(amazonSelector.ITEM_NAME_SELECTOR)
+            .attr('title')
+            .toString(),
           item_price: $(el).find(amazonSelector.ITEM_PRICE_SELECTOR).text(),
-          item_img:
-            $(el).find(amazonSelector.ITEM_IMG_SELECTOR).attr('src') + '',
-          item_url:
-            $(el).find(amazonSelector.ITEM_URL_SELECTOR).attr('href') + '',
+          item_img: $(el)
+            .find(amazonSelector.ITEM_IMG_SELECTOR)
+            .attr('src')
+            .toString(),
+          item_url: new URL(
+            url.origin +
+              $(el)
+                .find(amazonSelector.ITEM_URL_SELECTOR)
+                .attr('href')
+                .toString(),
+          ).toString(),
         });
       });
       return wishlistItems;
@@ -82,12 +101,15 @@ export class Scraper {
     }
   }
 
-  async ounassScraper(url: string): Promise<WishlistItem[] | ErrorMessage> {
+  async ounassScraper(
+    url: URL,
+    axiosConfig?: AxiosRequestConfig,
+  ): Promise<WishlistItem[] | ErrorMessage> {
     const wishlistItems: WishlistItem[] = [];
 
     try {
       // fetch html of the page we want to scrape
-      const { data } = await axios.get(url);
+      const { data } = await axios.get(url.toString(), axiosConfig);
 
       // Load html we fetched in the previous line
       const $ = cheerio.load(data);
@@ -99,10 +121,21 @@ export class Scraper {
         wishlistItems.push({
           item_name: $(el).find(ounassSelector.ITEM_NAME_SELECTOR).text(),
           item_price: $(el).find(ounassSelector.ITEM_PRICE_SELECTOR).text(),
-          item_img:
-            $(el).find(ounassSelector.ITEM_IMG_SELECTOR).attr('src') + '',
-          item_url:
-            $(el).find(ounassSelector.ITEM_URL_SELECTOR).attr('href') + '',
+          item_img: new URL(
+            url.protocol +
+              $(el)
+                .find(ounassSelector.ITEM_IMG_SELECTOR)
+                .attr('src')
+                .toString()
+                .substring(1),
+          ).toString(), // repalce the '//' at first with the protocol
+          item_url: new URL(
+            url.origin +
+              $(el)
+                .find(ounassSelector.ITEM_URL_SELECTOR)
+                .attr('href')
+                .toString(),
+          ).toString(), // add the origin to the url path to get the full url
         });
       });
 
@@ -113,36 +146,26 @@ export class Scraper {
   }
 
   // validate url format method & call scraping method based on the domain
-  async wishlistScraper(url: string): Promise<WishlistItem[] | ErrorMessage> {
-    const supportedDomains = Object.values(supportedDomain);
-    let flag = false;
-    const wishlistUrl = new URL(url);
-    if (Boolean(wishlistUrl)) {
-      for (const domain in supportedDomains) {
-        if (
-          url.includes(supportedDomains[domain]) &&
-          url.includes(supportedDomain.MAMAS_PAPAS_Domain)
-        ) {
-          flag = true;
-          return await this.mamasandpapasScraper(url);
-        }
-        if (
-          url.includes(supportedDomains[domain]) &&
-          url.includes(supportedDomain.AMAZON_DOMAIN)
-        ) {
-          flag = true;
-          return await this.amazonScraper(url);
-        }
-        if (
-          url.includes(supportedDomains[domain]) &&
-          url.includes(supportedDomain.OUNASS_DOMAIN)
-        ) {
-          flag = true;
-          return await this.ounassScraper(url);
-        }
+  async wishlistScraper(
+    url: string,
+    axiosConfig?: AxiosRequestConfig,
+  ): Promise<WishlistItem[] | ErrorMessage | any> {
+    try {
+      const wishlistUrl = new URL(url);
+      const requestConfig = axiosConfig ?? {};
+      if (wishlistUrl.hostname.includes(supportedDomain.MAMAS_PAPAS_DOMAIN)) {
+        return await this.mamasandpapasScraper(wishlistUrl, requestConfig);
       }
-      if (flag == false) return setError('Domain not supported');
+      if (wishlistUrl.hostname.includes(supportedDomain.AMAZON_DOMAIN)) {
+        return await this.amazonScraper(wishlistUrl, requestConfig);
+      }
+      if (wishlistUrl.hostname.includes(supportedDomain.OUNASS_DOMAIN)) {
+        return await this.ounassScraper(wishlistUrl, requestConfig);
+      }
+
+      return setError('Domain not supported');
+    } catch (e) {
+      throw new Error('Invalid Url');
     }
-    throw new Error('Invalid Url');
   }
 }
