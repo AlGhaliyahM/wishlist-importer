@@ -38,7 +38,8 @@ export class Scraper {
           item_price: $(el)
             .find(mamasandpapasSelector.ITEM_PRICE_SELECTOR)
             .attr('content')
-            .toString(),
+            .toString()
+            .replace(/[^0-9,.]/g, ''),
           item_img: $(el)
             .find(mamasandpapasSelector.ITEM_IMG_SELECTOR)
             .attr('src')
@@ -81,7 +82,10 @@ export class Scraper {
             .find(amazonSelector.ITEM_NAME_SELECTOR)
             .attr('title')
             .toString(),
-          item_price: $(el).find(amazonSelector.ITEM_PRICE_SELECTOR).text(),
+          item_price: $(el)
+            .find(amazonSelector.ITEM_PRICE_SELECTOR)
+            .text()
+            .replace(/[^0-9,.]/g, ''),
           item_img: $(el)
             .find(amazonSelector.ITEM_IMG_SELECTOR)
             .attr('src')
@@ -120,7 +124,10 @@ export class Scraper {
       list.each((i, el) => {
         wishlistItems.push({
           item_name: $(el).find(ounassSelector.ITEM_NAME_SELECTOR).text(),
-          item_price: $(el).find(ounassSelector.ITEM_PRICE_SELECTOR).text(),
+          item_price: $(el)
+            .find(ounassSelector.ITEM_PRICE_SELECTOR)
+            .text()
+            .replace(/[^0-9,.]/g, ''),
           item_img: new URL(
             url.protocol +
               $(el)
@@ -138,7 +145,6 @@ export class Scraper {
           ).toString(), // add the origin to the url path to get the full url
         });
       });
-
       return wishlistItems;
     } catch (error) {
       return setError('Error encountred during fetching ');
