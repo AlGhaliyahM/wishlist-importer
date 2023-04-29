@@ -34,7 +34,7 @@ describe('Scraping wishlist Url', () => {
 
   test('Scraping Ounass wishlist', async () => {
     const data = await scraper.wishlistScraper(
-      'https://en-saudi.ounass.com/wishlist/shared/0cfa1b20-d32d-11ed-948c-db4d3a08f2f3',
+      'https://en-saudi.ounass.com/wishlist/shared/d781e740-e68f-11ed-8a10-7ff9ae1ee681',
     );
     expect(data).toStrictEqual(ounassData);
   });
