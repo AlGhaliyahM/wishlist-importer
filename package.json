@@ -16,7 +16,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
     "prepare": "husky install",
-    "postinstall": "husky install",
+    "_postinstall": "husky install",
     "lintfix": "eslint --fix --ext \".ts,.js\" --ignore-path .eslintignore ."
   },
   "lint-staged": {
