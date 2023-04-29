@@ -1,6 +1,6 @@
 {
   "name": "wishlist-importer",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A wishlist importer library for providing the wishlist items data",
   "main": "dist/index.js",
   "types": "commonjs",
